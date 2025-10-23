@@ -13,6 +13,7 @@ public class main {
 		scanner.nextLine();
 
 		StringProcessor processor;
+		processor = new StringProcessor("", "");
 
 		if (choice == 2) {
 			System.out.print("Enter input filename: ");
@@ -22,7 +23,7 @@ public class main {
 
 			processor = new StringProcessor("", delimiters);
 			processor.processFromFile(inputFilename);
-		} else {
+		} else if (choice == 1) {
 			System.out.print("Enter tokens string: ");
 			String tokensString = scanner.nextLine();
 			System.out.print("Enter delimiters: ");
@@ -30,6 +31,8 @@ public class main {
 
 			processor = new StringProcessor(tokensString, delimitersString);
 			processor.process();
+		} else {
+			System.out.print("Wrong input");
 		}
 
 		System.out.print("\nSave results to file? (y/n): ");
