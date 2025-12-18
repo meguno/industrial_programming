@@ -4,7 +4,6 @@ import IO.*;
 import abstractClasses.abstractStorage;
 import java.io.*;
 import java.nio.file.*;
-//import java.util.*;
 import java.util.jar.*;
 import java.util.zip.*;
 
@@ -36,7 +35,6 @@ public class ArchiveHandler {
 		try (FileOutputStream fos = new FileOutputStream(jarFile);
 				JarOutputStream jos = new JarOutputStream(fos)) {
 
-			// Добавляем Manifest
 			Manifest manifest = new Manifest();
 			manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 			if (mainClass != null) {
@@ -47,7 +45,6 @@ public class ArchiveHandler {
 			manifest.write(jos);
 			jos.closeEntry();
 
-			// Добавляем файлы
 			Path sourcePath = Paths.get(sourceDir);
 			Files.walk(sourcePath)
 					.filter(path -> !Files.isDirectory(path))
@@ -100,30 +97,23 @@ public class ArchiveHandler {
 	}
 
 	public void createBackupZip(abstractStorage storage, String zipFile) throws IOException {
-		// Создаем временную директорию для файлов
 		String tempDir = "backup_temp";
 		Files.createDirectories(Paths.get(tempDir));
 
-		// Сохраняем данные в разные форматы
 		saveStorageToFiles(storage, tempDir);
 
-		// Архивируем
 		createZipArchive(tempDir, zipFile);
 
-		// Удаляем временную директорию
 		deleteDirectory(new File(tempDir));
 	}
 
 	private void saveStorageToFiles(abstractStorage storage, String dir) {
 		try {
-			// Сохраняем в CSV
 			io fileHandler = new io();
 			fileHandler.saveToFile(storage, dir + "/bicycles.csv");
 
-			// Сохраняем в JSON
 			fileHandler.saveToJsonFile(storage, dir + "/bicycles.json");
 
-			// Сохраняем в XML
 			XMLHandler xmlHandler = new XMLHandler();
 			xmlHandler.saveToXml(storage, dir + "/bicycles.xml");
 

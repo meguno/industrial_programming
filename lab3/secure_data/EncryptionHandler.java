@@ -12,7 +12,7 @@ import javax.crypto.spec.*;
 public class EncryptionHandler {
 	private static final String ALGORITHM = "AES";
 	private static final String TRANSFORMATION = "AES/ECB/PKCS5Padding";
-	private static final String SECRET_KEY = "MySuperSecretKey123"; // 16 символов для AES-128
+	private static final String SECRET_KEY = "MySuperSecretKey123";
 
 	public void encryptFile(String inputFile, String outputFile) throws Exception {
 		doCrypto(Cipher.ENCRYPT_MODE, inputFile, outputFile);
@@ -40,7 +40,6 @@ public class EncryptionHandler {
 	}
 
 	public void encryptDatabaseFile(String filename, abstractStorage storage) throws Exception {
-		// Сохраняем данные во временный файл
 		String tempFile = "temp_export.txt";
 		try (PrintWriter writer = new PrintWriter(tempFile)) {
 			for (Object item : storage.getAll()) {
@@ -48,10 +47,8 @@ public class EncryptionHandler {
 			}
 		}
 
-		// Шифруем временный файл
 		encryptFile(tempFile, filename);
 
-		// Удаляем временный файл
 		Files.deleteIfExists(Paths.get(tempFile));
 	}
 
@@ -73,7 +70,6 @@ public class EncryptionHandler {
 	}
 
 	private SecretKey getSecretKey() throws Exception {
-		// Используем фиксированный ключ для простоты
 		byte[] keyBytes = new byte[16];
 		byte[] secretBytes = SECRET_KEY.getBytes("UTF-8");
 		System.arraycopy(secretBytes, 0, keyBytes, 0, Math.min(secretBytes.length, keyBytes.length));
@@ -81,7 +77,6 @@ public class EncryptionHandler {
 	}
 
 	public void encryptWithPassword(String input, String password, String outputFile) throws Exception {
-		// Генерируем ключ из пароля
 		byte[] salt = new byte[8];
 		java.security.SecureRandom random = new java.security.SecureRandom();
 		random.nextBytes(salt);
@@ -99,11 +94,9 @@ public class EncryptionHandler {
 		try (FileOutputStream fileOut = new FileOutputStream(outputFile);
 				CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher)) {
 
-			// Записываем соль и IV
 			fileOut.write(salt);
 			fileOut.write(iv);
 
-			// Записываем зашифрованные данные
 			cipherOut.write(input.getBytes());
 		}
 
@@ -112,14 +105,12 @@ public class EncryptionHandler {
 
 	public String decryptWithPassword(String inputFile, String password) throws Exception {
 		try (FileInputStream fileIn = new FileInputStream(inputFile)) {
-			// Читаем соль и IV
 			byte[] salt = new byte[8];
 			fileIn.read(salt);
 
 			byte[] iv = new byte[16];
 			fileIn.read(iv);
 
-			// Генерируем ключ из пароля
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 			KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
 			SecretKey tmp = factory.generateSecret(spec);

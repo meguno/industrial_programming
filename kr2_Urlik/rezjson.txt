@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "generated": "Thu Dec 11 10:26:22 MSK 2025",
+    "totalStudents": 13,
+    "totalTeachers": 4
+  },
+  "teachers": [
+    {
+      "lastName": "Filipcov",
+      "subjectCode": 1,
+      "studentsCount": 7
+    },
+    {
+      "lastName": "Mazanik",
+      "subjectCode": 3,
+      "studentsCount": 5
+    },
+    {
+      "lastName": "Pasyra",
+      "subjectCode": 2,
+      "studentsCount": 6
+    },
+    {
+      "lastName": "Volchkova",
+      "subjectCode": 4,
+      "studentsCount": 5
+    }
+  ]
+}

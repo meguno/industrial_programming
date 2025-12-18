@@ -2,6 +2,7 @@ package menu;
 
 import abstractClasses.abstractStorage;
 import archiving.ArchiveHandler;
+import pattern.*;
 import secure_data.EncryptionHandler;
 import Bicycle.Bicycle;
 import Bicycle.BicycleListStorage;
@@ -77,12 +78,14 @@ public class menu {
             System.out.println("18. Encryption/Decryption");
             System.out.println("19. Archiving (ZIP/JAR)");
             System.out.println("20. Run Unit Tests");
+
+            System.out.println("\n=== Design Patterns ===");
+            System.out.println("21. Decorator Pattern Export");
             System.out.println("0. Exit");
+
             System.out.print("Select action: ");
 
-            System.out.println("\n=== Advanced Functions ===");
-
-            int choice = getValidatedInt(0, 15);
+            int choice = getValidatedInt(0, 21);
 
             switch (choice) {
                 case 1:
@@ -145,7 +148,9 @@ public class menu {
                 case 20:
                     unitTestsMenu();
                     break;
-
+                case 21:
+                    decoratorPatternMenu();
+                    break;
                 case 0:
                     exitMenu();
                     return;
@@ -777,8 +782,6 @@ public class menu {
         System.out.println();
     }
 
-    // Обновите класс menu.java, добавив следующие методы:
-
     private void xmlMenu() {
         System.out.println("\n=== XML OPERATIONS ===");
         System.out.println("1. Save to XML");
@@ -948,7 +951,6 @@ public class menu {
         System.out.println("Running unit tests...");
 
         try {
-            // Здесь можно запустить тесты
             System.out.println("Test results:");
             System.out.println("- Bicycle creation: PASSED");
             System.out.println("- Storage operations: PASSED");
@@ -958,5 +960,59 @@ public class menu {
         } catch (Exception e) {
             System.out.println("Tests failed: " + e.getMessage());
         }
+    }
+
+    private void decoratorPatternMenu() {
+        System.out.println("\n=== DECORATOR PATTERN - MULTI-FORMAT EXPORT ===");
+
+        if (storage.size() == 0) {
+            System.out.println("No data to export.");
+            return;
+        }
+
+        System.out.println("Select export format:");
+        System.out.println("1. Text only (base format)");
+        System.out.println("2. CSV format");
+        System.out.println("3. JSON format");
+        System.out.println("4. CSV + JSON");
+        System.out.println("5. All formats (Text + CSV + JSON)");
+        System.out.print("Your choice: ");
+
+        int choice = getValidatedInt(1, 5);
+        System.out.print("Enter base filename (without extension): ");
+        String baseFilename = scanner.nextLine().trim();
+
+        if (baseFilename.isEmpty()) {
+            baseFilename = "bicycles_export";
+        }
+
+        List<Bicycle> bicycles = storage.get_All();
+        DataWriter writer = new BaseDataWriter();
+
+        switch (choice) {
+            case 1:
+                writer.write(bicycles, baseFilename + ".txt");
+                break;
+            case 2:
+                writer = new CsvDataWriterDecorator(writer);
+                writer.write(bicycles, baseFilename);
+                break;
+            case 3:
+                writer = new JsonDataWriterDecorator(writer);
+                writer.write(bicycles, baseFilename);
+                break;
+            case 4:
+                writer = new CsvDataWriterDecorator(writer);
+                writer = new JsonDataWriterDecorator(writer);
+                writer.write(bicycles, baseFilename);
+                break;
+            case 5:
+                writer = new CsvDataWriterDecorator(writer);
+                writer = new JsonDataWriterDecorator(writer);
+                writer.write(bicycles, baseFilename);
+                break;
+        }
+
+        System.out.println("\n✓ Export completed using Decorator Pattern!");
     }
 }

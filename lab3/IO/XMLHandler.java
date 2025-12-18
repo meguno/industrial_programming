@@ -1,4 +1,3 @@
-// XMLHandler.java
 package IO;
 
 import abstractClasses.abstractStorage;
@@ -10,9 +9,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.text.SimpleDateFormat;
-//import java.util.ArrayList;
 import java.util.Date;
-//import java.util.List;
 
 public class XMLHandler {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
@@ -23,11 +20,9 @@ public class XMLHandler {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.newDocument();
 
-			// Создаем корневой элемент
 			Element root = doc.createElement("bicycles");
 			doc.appendChild(root);
 
-			// Добавляем метаданные
 			Element metadata = doc.createElement("metadata");
 			root.appendChild(metadata);
 
@@ -39,7 +34,6 @@ public class XMLHandler {
 			count.setTextContent(String.valueOf(storage.size()));
 			metadata.appendChild(count);
 
-			// Добавляем велосипеды
 			Element bikesElement = doc.createElement("bicycleList");
 			root.appendChild(bikesElement);
 
@@ -48,7 +42,6 @@ public class XMLHandler {
 				bikesElement.appendChild(bikeElement);
 			}
 
-			// Записываем в файл
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -81,7 +74,6 @@ public class XMLHandler {
 
 			doc.getDocumentElement().normalize();
 
-			// Ищем элементы bicycle
 			NodeList bikeNodes = doc.getElementsByTagName("bicycle");
 
 			for (int i = 0; i < bikeNodes.getLength(); i++) {
@@ -113,10 +105,8 @@ public class XMLHandler {
 	private Element createBicycleElement(Document doc, Bicycle bike) {
 		Element bikeElement = doc.createElement("bicycle");
 
-		// Добавляем атрибут id
 		bikeElement.setAttribute("id", String.valueOf(bike.getId()));
 
-		// Добавляем дочерние элементы
 		Element type = doc.createElement("type");
 		type.setTextContent(bike.getType());
 		bikeElement.appendChild(type);
@@ -147,7 +137,6 @@ public class XMLHandler {
 		price.setTextContent(String.format("%.2f", bike.getPrice()));
 		bikeElement.appendChild(price);
 
-		// Добавляем аксессуары
 		if (!bike.getAccessories().isEmpty()) {
 			Element accessories = doc.createElement("accessories");
 			for (String accessory : bike.getAccessories()) {
@@ -179,7 +168,6 @@ public class XMLHandler {
 
 		Bicycle bike = new Bicycle(id, type, model, frameMaterial, wheelSize, gears, manufactureDate, price);
 
-		// Парсим аксессуары
 		NodeList accessories = bikeElement.getElementsByTagName("accessory");
 		for (int i = 0; i < accessories.getLength(); i++) {
 			Element accessoryElement = (Element) accessories.item(i);
@@ -199,7 +187,6 @@ public class XMLHandler {
 
 	public void updateXmlFile(abstractStorage<Bicycle> storage, String filename) {
 		try {
-			// Загружаем существующий документ
 			File file = new File(filename);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -213,16 +200,13 @@ public class XMLHandler {
 				doc.appendChild(root);
 			}
 
-			// Обновляем данные
 			doc.getDocumentElement().normalize();
 
-			// Удаляем старые элементы bicycle
 			NodeList oldBikes = doc.getElementsByTagName("bicycle");
 			while (oldBikes.getLength() > 0) {
 				oldBikes.item(0).getParentNode().removeChild(oldBikes.item(0));
 			}
 
-			// Добавляем новые
 			Element root = doc.getDocumentElement();
 			if (root == null) {
 				root = doc.createElement("bicycles");
@@ -234,7 +218,6 @@ public class XMLHandler {
 				root.appendChild(bikeElement);
 			}
 
-			// Сохраняем
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");

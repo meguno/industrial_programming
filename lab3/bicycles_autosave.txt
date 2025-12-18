@@ -1,2 +1,2 @@
 ID,Type,Model,Frame Material,Wheel Size,Gears,Manufacture Date,Price,Accessories
-1,city,002,metalic,17,24,02.05.2000,700,00,
+1,m,dd,qq,14,14,,200,00,

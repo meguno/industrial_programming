@@ -1,6 +1,10 @@
 package IO;
 
 import abstractClasses.abstractStorage;
+import pattern.BaseDataWriter;
+import pattern.CsvDataWriterDecorator;
+import pattern.DataWriter;
+import pattern.JsonDataWriterDecorator;
 import Bicycle.Bicycle;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -597,8 +601,6 @@ public class io {
 		}
 	}
 
-	// Добавьте эти методы в существующий класс io
-
 	public int loadFromJson(String filename, abstractStorage<Bicycle> storage) {
 		int loadedCount = 0;
 
@@ -622,23 +624,20 @@ public class io {
 	}
 
 	private void parseJsonAndLoad(String json, abstractStorage<Bicycle> storage) throws Exception {
-		// Простой парсер JSON (для простоты, можно использовать библиотеку вроде Gson)
 		json = json.trim();
 
 		if (!json.startsWith("{") || !json.endsWith("}")) {
 			throw new IllegalArgumentException("Invalid JSON format");
 		}
 
-		// Находим массив bicycles
 		int startIndex = json.indexOf("\"bicycles\":[");
 		if (startIndex == -1)
 			return;
 
-		startIndex += 12; // Длина "\"bicycles\":["
+		startIndex += 12;
 		int endIndex = json.lastIndexOf("]");
 		String bikesArray = json.substring(startIndex, endIndex);
 
-		// Разбиваем на отдельные объекты
 		String[] bikeObjects = bikesArray.split("\\},\\s*\\{");
 
 		for (String bikeJson : bikeObjects) {
@@ -653,7 +652,6 @@ public class io {
 	}
 
 	private Bicycle parseBicycleJson(String json) throws Exception {
-		// Извлекаем поля из JSON
 		int id = extractIntFromJson(json, "id");
 		String type = extractStringFromJson(json, "type");
 		String model = extractStringFromJson(json, "model");
@@ -700,5 +698,22 @@ public class io {
 			return m.group(1);
 		}
 		return "";
+	}
+
+	public void exportWithDecorator(abstractStorage<Bicycle> storage, String format, String filename) {
+		List<Bicycle> bicycles = storage.get_All();
+
+		DataWriter writer = new BaseDataWriter();
+
+		if (format.equalsIgnoreCase("csv")) {
+			writer = new CsvDataWriterDecorator(writer);
+		} else if (format.equalsIgnoreCase("json")) {
+			writer = new JsonDataWriterDecorator(writer);
+		} else if (format.equalsIgnoreCase("all")) {
+			writer = new CsvDataWriterDecorator(writer);
+			writer = new JsonDataWriterDecorator(writer);
+		}
+
+		writer.write(bicycles, filename);
 	}
 }
