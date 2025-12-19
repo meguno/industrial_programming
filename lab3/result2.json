@@ -1,0 +1,40 @@
+{
+  "bicycles": [
+    {
+      "id": 1,
+      "type": "city",
+      "model": "aist",
+      "frameMaterial": "wood",
+      "wheelSize": 16,
+      "gears": 24,
+      "manufactureDate": "01.01.2001",
+      "price": 400,00,
+      "accessories": [
+      ]
+    },
+    {
+      "id": 3,
+      "type": "road",
+      "model": "aist",
+      "frameMaterial": "wood2",
+      "wheelSize": 16,
+      "gears": 24,
+      "manufactureDate": "01.01.2001",
+      "price": 800,00,
+      "accessories": [
+      ]
+    },
+    {
+      "id": 4,
+      "type": "sport",
+      "model": "aist",
+      "frameMaterial": "wood",
+      "wheelSize": 16,
+      "gears": 24,
+      "manufactureDate": "01.01.2001",
+      "price": 600,00,
+      "accessories": [
+      ]
+    }
+  ]
+}

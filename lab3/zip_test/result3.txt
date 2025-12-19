@@ -1,0 +1,4 @@
+2,mountine,aist,wood,16,24,01.13.2001,1000 
+4,sport,aist,wood,16,24,01.01.2001,600 
+3,road,aist,wood2,16,24,01.01.2001,800 
+1,city,aist,wood,16,24v,01.01.2001,400 
