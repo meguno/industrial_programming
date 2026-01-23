@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forecast>
+    <city name="Minsk" warnings="yes">
+        <day date="2026-01-22">
+            <temp>-15</temp>
+            <weather>cloudy</weather>
+        </day>
+        <day date="2026-01-23">
+            <temp>-10</temp>
+            <weather>snow</weather>
+        </day>
+    </city>
+    <city name="Brest" warnings="no">
+        <day date="2026-01-22">
+            <temp>-5</temp>
+            <weather>sunny</weather>
+        </day>
+        <day date="2026-01-24">
+            <temp>-2</temp>
+            <weather>rain</weather>
+        </day>
+    </city>
+</forecast>
